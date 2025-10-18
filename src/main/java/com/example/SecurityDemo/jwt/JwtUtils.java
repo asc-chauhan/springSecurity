@@ -26,7 +26,7 @@ public class JwtUtils {
     private String jwtSecret;
     @Value("${spring.app.jwtExpirationMs}")
     private int jwtExpirationMs;
-    
+
     public String getJwtFromHeader(HttpServletRequest request){
         String bearerToken = request.getHeader("Authorization");
         logger.debug("Authorization Header: {}", bearerToken);
@@ -42,13 +42,13 @@ public class JwtUtils {
         return Jwts.builder()
                 .subject(username)
                 .issuedAt(new Date())
-                .expiration(new Date(new Date().getTime() + jwtExpirationMs))
+                .expiration(new Date((new Date()).getTime() + jwtExpirationMs))
                 .signWith(key())
                 .compact();
     }
 
     // Getting username from token
-    public String getUsernameFromToken(String token){
+    public String getUsernameFromJwtToken(String token){
         return Jwts.parser()
                 .verifyWith((SecretKey) key())
                 .build().parseSignedClaims(token)
